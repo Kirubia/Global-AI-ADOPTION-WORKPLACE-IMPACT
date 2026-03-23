@@ -1,0 +1,6 @@
+__pycache__/
+*.pkl
+*.parquet
+*.png
+.env
+.ipynb_checkpoints/
