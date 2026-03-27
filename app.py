@@ -69,9 +69,9 @@ def load_data():
 def load_models():
     models = {}
     for name, path in [
-        ("m1", "Notebook/data/m1_model_tuned.pkl"),
+        ("m1", "Notebook/data/m1_model.pkl"),
         ("m2", "Notebook/data/m2_model.pkl"),
-        ("m3", "Notebook/data/m3_models_tuned.pkl"),
+        ("m3", "Notebook/data/m3_models.pkl"),
         ("m4", "Notebook/data/m4_results.pkl"),
     ]:
         try:
