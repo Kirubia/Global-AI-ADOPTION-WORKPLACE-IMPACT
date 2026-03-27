@@ -62,7 +62,7 @@ st.markdown("""
 # ── Data & model loading ──────────────────────────────────────────────────────
 @st.cache_data
 def load_data():
-    df = pd.read_parquet("data/cleaned.parquet")
+    df = pd.read_parquet("Data/cleaned.parquet")
     return df
 
 @st.cache_resource
