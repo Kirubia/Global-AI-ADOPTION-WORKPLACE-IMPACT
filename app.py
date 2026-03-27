@@ -69,10 +69,10 @@ def load_data():
 def load_models():
     models = {}
     for name, path in [
-        ("m1", "data/m1_model_tuned.pkl"),
-        ("m2", "data/m2_model.pkl"),
-        ("m3", "data/m3_models_tuned.pkl"),
-        ("m4", "data/m4_results.pkl"),
+        ("m1", "Notebook/data/m1_model_tuned.pkl"),
+        ("m2", "Notebook/data/m2_model.pkl"),
+        ("m3", "Notebook/data/m3_models_tuned.pkl"),
+        ("m4", "Notebook/data/m4_results.pkl"),
     ]:
         try:
             with open(path, "rb") as f:
@@ -233,7 +233,7 @@ elif page == "🎯 Module 1 — Adoption Classifier":
     with col2:
         st.markdown('<div class="section-header">Confusion matrix (normalised)</div>', unsafe_allow_html=True)
         try:
-            img = plt.imread("outputs/m1_confusion_matrix.png")
+            img = plt.imread("Notebook/outputs/m1_confusion_matrix.png")
             st.image(img)
         except Exception:
             st.info("Run the module script to generate the confusion matrix plot.")
@@ -272,7 +272,7 @@ elif page == "🔵 Module 2 — Maturity Clusters":
     with col1:
         st.markdown('<div class="section-header">PCA cluster map</div>', unsafe_allow_html=True)
         try:
-            st.image("outputs/m2_clusters.png")
+            st.image("Notebook/outputs/m2_clusters.png")
         except Exception:
             st.info("Run module 2 script to generate cluster plots.")
 
@@ -287,7 +287,7 @@ elif page == "🔵 Module 2 — Maturity Clusters":
         st.divider()
         st.markdown('<div class="section-header">Heatmap</div>', unsafe_allow_html=True)
         try:
-            st.image("outputs/m2_heatmap.png")
+            st.image("Notebook/outputs/m2_heatmap.png")
         except Exception:
             pass
 
@@ -345,14 +345,14 @@ elif page == "💰 Module 3 — ROI Regression":
 
     with tab2:
         try:
-            st.image("outputs/m3_shap_revenue.png", caption="SHAP beeswarm — revenue_growth_percent")
+            st.image("Notebook/outputs/m3_shap_revenue.png", caption="SHAP beeswarm — revenue_growth_percent")
         except Exception:
             st.info("SHAP plot not found — run module 3 script.")
 
     with tab3:
         try:
-            st.image("outputs/m3_actual_vs_predicted.png")
-            st.image("outputs/m3_residuals.png")
+            st.image("Notebook/outputs/m3_actual_vs_predicted.png")
+            st.image("Notebook/outputs/m3_residuals.png")
         except Exception:
             st.info("Plots not found — run module 3 script.")
 
@@ -388,7 +388,7 @@ elif page == "⚖️ Module 4 — Ethics & Risk":
     st.divider()
     col1, col2 = st.columns(2)
     with col1:
-        st.image("outputs/m4_ethics_risk.png")
+        st.image("Notebook/outputs/m4_ethics_risk.png")
 
     with col2:
         st.markdown('<div class="section-header">Failure risk — odds ratios</div>', unsafe_allow_html=True)
@@ -438,7 +438,7 @@ elif page == "🔧 Optuna Tuning":
 
     st.divider()
     try:
-        st.image("outputs/optuna_convergence.png", caption="Convergence — best score per trial")
+        st.image("Notebook/outputs/optuna_convergence.png", caption="Convergence — best score per trial")
     except Exception:
         st.info("Run the tuning scripts to generate convergence plots.")
 
