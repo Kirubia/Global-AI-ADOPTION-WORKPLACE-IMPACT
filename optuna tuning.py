@@ -20,7 +20,7 @@ os.makedirs("data",    exist_ok=True)
 # ── 1. LOAD & ENCODE ─────────────────────────────────────────────────────────
 
 print("Loading data...")
-df = pd.read_parquet("data/cleaned.parquet")
+df = pd.read_parquet("Data/cleaned.parquet")
 
 CATEGORICAL = ["region","industry","company_size","ai_primary_tool","ai_use_case","data_privacy_level"]
 enc = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1)
@@ -114,8 +114,8 @@ pickle.dump({
     "baseline_f1":  BASELINE_M1_F1,
     "baseline_roc": BASELINE_M1_ROC,
     "trials":       [(t.number, round(t.value, 4)) for t in study_m1.trials],
-}, open("data/m1_model_tuned.pkl","wb"))
-print("  Saved: data/m1_model_tuned.pkl")
+}, open("Notebook/data/m1_model.pkl","wb"))
+print("  Saved: Notebook/data/m1_model.pkl")
 
 # ── 3. OPTUNA — MODULE 3 (LightGBM) ──────────────────────────────────────────
 
@@ -179,8 +179,8 @@ pickle.dump({
     "models":   m3_models,
     "features": list(FEATURES_M3),
     "results":  m3_results,
-}, open("data/m3_models_tuned.pkl","wb"))
-print("  Saved: data/m3_models_tuned.pkl")
+}, open("Notebook/data/m3_models.pkl","wb"))
+print("  Saved: Notebook/data/m3_models.pkl")
 
 # ── 4. CONVERGENCE PLOTS ─────────────────────────────────────────────────────
 
@@ -199,11 +199,11 @@ def plot_convergence(ax, trials, baseline, best, title, ylabel):
     ax.set_title(title); ax.set_xlabel("Trial"); ax.set_ylabel(ylabel)
     ax.legend(fontsize=8)
 
-m1_data = pickle.load(open("data/m1_model_tuned.pkl","rb"))
+m1_data = pickle.load(open("Notebook/data/m1_model.pkl","rb"))
 plot_convergence(axes[0], m1_data["trials"], m1_data["baseline_f1"], m1_data["best_f1"],
                  "Module 1 — XGBoost (Macro F1)", "Macro F1")
 
-m3_data = pickle.load(open("data/m3_models_tuned.pkl","rb"))
+m3_data = pickle.load(open("Notebook/data/m3_models.pkl","rb"))
 for i, target in enumerate(TARGETS_REG):
     r = m3_data["results"][target]
     plot_convergence(axes[i+1], r["trials"], r["baseline_r2"], r["r2"],
@@ -211,9 +211,9 @@ for i, target in enumerate(TARGETS_REG):
 
 plt.suptitle("Optuna convergence — TPE sampler", fontsize=12, y=1.02)
 plt.tight_layout()
-plt.savefig("outputs/optuna_convergence.png", dpi=150, bbox_inches="tight")
+plt.savefig("Notebook/outputs/optuna_convergence.png", dpi=150, bbox_inches="tight")
 plt.close()
-print("  Saved: outputs/optuna_convergence.png")
+print("  Saved: Notebook/outputs/optuna_convergence.png")
 
 print("""
 ══════════════════════════════════════════════════════
