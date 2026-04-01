@@ -40,7 +40,18 @@ FEATURES_M1 = [c for c in df.columns if c not in EXCLUDE_M1]
 EXCLUDE_M3 = EXCLUDE_M1 + TARGETS_REG + ["roi_proxy"]
 FEATURES_M3 = [c for c in df.columns if c not in EXCLUDE_M3]
 
+# Normalize target column
+df["ai_adoption_stage"] = df["ai_adoption_stage"].astype(str).str.lower().str.strip()
+
+# Map target
 df["y"] = df["ai_adoption_stage"].map({s:i for i,s in enumerate(STAGE_ORDER)})
+
+# Debug (optional)
+print("Unique stages:", df["ai_adoption_stage"].unique())
+
+# Remove invalid rows
+df = df.dropna(subset=["y", "company_id"])
+df = df.reset_index(drop=True)
 X_all   = df[FEATURES_M1].astype(float)
 y_all   = df["y"].copy()
 groups  = df["company_id"]
@@ -50,8 +61,13 @@ train_idx, test_idx = next(gss.split(X_all, y_all, groups=groups))
 X_train_m1, X_test_m1 = X_all.iloc[train_idx], X_all.iloc[test_idx]
 y_train_m1, y_test_m1 = y_all.iloc[train_idx], y_all.iloc[test_idx]
 
+# Remove NaNs AFTER split (critical)
+mask = y_train_m1.notna()
+y_train_m1 = y_train_m1[mask]
+X_train_m1 = X_train_m1.loc[y_train_m1.index]
+
 class_counts   = y_train_m1.value_counts().sort_index()
-sample_weights = y_train_m1.map(lambda c: len(y_train_m1) / (4 * class_counts[c]))
+sample_weights = y_train_m1.map(lambda c: len(y_train_m1) / (4 * class_counts.get(c, 1)))
 
 # Subsample 30k for fast trial evaluation
 rng       = np.random.RandomState(42)
