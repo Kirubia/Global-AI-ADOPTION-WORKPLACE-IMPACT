@@ -205,13 +205,21 @@ if page == "🏠  Home & Story":
     # ── Hero ──────────────────────────────────────────────────────
     st.markdown("""
     <div class="hero">
-      <h1>🤖 Global AI Adoption & Workforce Impact</h1>
-      <p>An end-to-end ML study of how 10,000 companies across 6 regions are navigating the AI transformation — and what separates the leaders from the laggards.</p>
-      <span class="badge">📦 150,000 survey responses</span>
-      <span class="badge">🏢 10,000 companies</span>
-      <span class="badge">🌍 6 regions · 9 industries</span>
-      <span class="badge">📅 2023 – 2026</span>
-      <span class="badge">4 ML modules</span>
+        <h1>🤖 Global AI Adoption & Workforce Impact</h1>
+        <p>
+        AI is transforming industries — but most companies don’t know if they are ahead or falling behind.
+        <br><br>
+        This platform helps organizations:
+        • Benchmark their AI maturity  
+        • Predict adoption stage using ML  
+        • Understand ROI and risks  
+        • Make data-driven strategy decisions
+        </p>
+        <span class="badge">📦 150,000 survey responses</span>
+        <span class="badge">🏢 10,000 companies</span>
+        <span class="badge">🌍 6 regions · 9 industries</span>
+        <span class="badge">📅 2023 – 2026</span>
+        <span class="badge">4 ML modules</span>
     </div>
     """, unsafe_allow_html=True)
 
