@@ -36,20 +36,20 @@ st.set_page_config(
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-    .section-header {
-        font-size: 1.1rem; font-weight: 600; color: #1a1a2e;
-        border-left: 4px solid #378ADD; padding-left: 10px; margin: 1.5rem 0 1rem;
-    }
-    .insight-box {
-        background: #EAF3DE; border-left: 4px solid #1D9E75;
-        border-radius: 0 8px 8px 0; padding: 0.75rem 1rem;
-        margin: 0.75rem 0; font-size: 0.9rem;
-    }
-    .warning-box {
-        background: #FAEEDA; border-left: 4px solid #EF9F27;
-        border-radius: 0 8px 8px 0; padding: 0.75rem 1rem;
-        margin: 0.75rem 0; font-size: 0.9rem;
-    }
+.section-header {
+    font-size: 1.1rem; font-weight: 600; color: #1a1a2e;
+    border-left: 4px solid #378ADD; padding-left: 10px; margin: 1.5rem 0 1rem;
+}
+.insight-box {
+    background: #EAF3DE; border-left: 4px solid #1D9E75;
+    border-radius: 0 8px 8px 0; padding: 0.75rem 1rem;
+    margin: 0.75rem 0; font-size: 0.9rem;
+}
+.warning-box {
+    background: #FAEEDA; border-left: 4px solid #EF9F27;
+    border-radius: 0 8px 8px 0; padding: 0.75rem 1rem;
+    margin: 0.75rem 0; font-size: 0.9rem;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -81,23 +81,23 @@ models = load_models()
 STAGE_ORDER   = ["none", "pilot", "partial", "full"]
 CLUSTER_NAMES = {0: "Struggling experimenters", 1: "AI leaders",
                  2: "Steady adopters",           3: "Early-stage / laggards"}
+CATS = ["region", "industry", "company_size", "ai_primary_tool",
+        "ai_use_case", "data_privacy_level"]
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.title("🤖 AI Adoption ML")
     st.caption("150,000 responses · 10,000 companies · 2023–2026")
     st.divider()
-
     page = st.radio("Navigate", [
         "📊 Overview",
         "🎯 Module 1 — Adoption Classifier",
         "🔵 Module 2 — Maturity Clusters",
         "💰 Module 3 — ROI Regression",
-        "⚖️  Module 4 — Ethics & Risk",
+        "⚖️ Module 4 — Ethics & Risk",
         "🔧 Optuna Tuning",
         "🔮 Predict a Company",
     ])
-
     st.divider()
     st.markdown("**Filters**")
     sel_industry = st.multiselect("Industry",     sorted(df["industry"].unique()),     default=[])
@@ -115,18 +115,18 @@ if page == "📊 Overview":
     st.caption(f"Showing **{len(df_f):,}** rows · {df_f['company_id'].nunique():,} unique companies")
 
     c1, c2, c3, c4, c5 = st.columns(5)
-    c1.metric("Avg adoption rate",     f"{df_f['ai_adoption_rate'].mean():.1f}%")
-    c2.metric("Full adoption",         f"{(df_f['ai_adoption_stage']=='full').mean()*100:.1f}%")
-    c3.metric("Avg productivity gain", f"{df_f['productivity_change_percent'].mean():.1f}%")
-    c4.metric("Avg revenue growth",    f"{df_f['revenue_growth_percent'].mean():.1f}%")
-    c5.metric("Avg maturity score",    f"{df_f['ai_maturity_score'].mean():.3f}")
+    c1.metric("Avg adoption rate",    f"{df_f['ai_adoption_rate'].mean():.1f}%")
+    c2.metric("Full adoption",        f"{(df_f['ai_adoption_stage']=='full').mean()*100:.1f}%")
+    c3.metric("Avg productivity gain",f"{df_f['productivity_change_percent'].mean():.1f}%")
+    c4.metric("Avg revenue growth",   f"{df_f['revenue_growth_percent'].mean():.1f}%")
+    c5.metric("Avg maturity score",   f"{df_f['ai_maturity_score'].mean():.3f}")
 
     st.divider()
     col1, col2 = st.columns(2)
 
     with col1:
         st.markdown('<div class="section-header">Adoption stage breakdown</div>', unsafe_allow_html=True)
-        vc  = df_f["ai_adoption_stage"].value_counts()
+        vc = df_f["ai_adoption_stage"].value_counts()
         fig, ax = plt.subplots(figsize=(5, 3))
         ax.bar(vc.index, vc.values, color=["#378ADD","#1D9E75","#888780","#EF9F27"])
         ax.set_ylabel("Count")
@@ -141,6 +141,7 @@ if page == "📊 Overview":
         sns.despine(); st.pyplot(fig, use_container_width=True); plt.close()
 
     col3, col4 = st.columns(2)
+
     with col3:
         st.markdown('<div class="section-header">Adoption rate trend</div>', unsafe_allow_html=True)
         trend = df_f.groupby("survey_year")["ai_adoption_rate"].mean()
@@ -171,7 +172,7 @@ elif page == "🎯 Module 1 — Adoption Classifier":
         st.stop()
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Macro F1",    f"{m1['best_f1']:.4f}",  f"{m1['best_f1']-m1.get('baseline_f1',0.8277):+.4f} vs baseline")
+    c1.metric("Macro F1",    f"{m1['best_f1']:.4f}", f"{m1['best_f1']-m1.get('baseline_f1',0.8277):+.4f} vs baseline")
     c2.metric("Weighted F1", f"{m1.get('weighted_f1', 0.889):.4f}")
     c3.metric("ROC-AUC",     f"{m1.get('roc_auc', 0.979):.4f}")
     c4.metric("Classes",     "4", "none · pilot · partial · full")
@@ -219,6 +220,7 @@ elif page == "🔵 Module 2 — Maturity Clusters":
 
     st.divider()
     col1, col2 = st.columns([1.2, 1])
+
     with col1:
         img_path = p("Notebook/outputs/m2_clusters.png")
         if pathlib.Path(img_path).exists():
@@ -228,8 +230,8 @@ elif page == "🔵 Module 2 — Maturity Clusters":
 
     with col2:
         st.markdown('<div class="section-header">Cluster profile</div>', unsafe_allow_html=True)
-        metrics_show = ["ai_maturity_score","ai_failure_rate","revenue_growth_percent","task_automation_rate","ai_training_hours"]
-        profile_show = profile[metrics_show].copy()
+        metrics_show  = ["ai_maturity_score","ai_failure_rate","revenue_growth_percent","task_automation_rate","ai_training_hours"]
+        profile_show  = profile[metrics_show].copy()
         profile_show.index = [cnames[c] for c in profile_show.index]
         st.dataframe(profile_show.T.round(3), use_container_width=True)
 
@@ -248,12 +250,12 @@ elif page == "💰 Module 3 — ROI Regression":
 
     res = m3["results"]
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Revenue R²",   f"{res['revenue_growth_percent']['r2']:.4f}",
+    c1.metric("Revenue R²",  f"{res['revenue_growth_percent']['r2']:.4f}",
               f"{res['revenue_growth_percent']['r2']-0.2357:+.4f} vs baseline")
-    c2.metric("Revenue RMSE", f"{res['revenue_growth_percent']['rmse']:.3f}")
-    c3.metric("Cost R²",      f"{res['cost_reduction_percent']['r2']:.4f}",
+    c2.metric("Revenue RMSE",f"{res['revenue_growth_percent']['rmse']:.3f}")
+    c3.metric("Cost R²",     f"{res['cost_reduction_percent']['r2']:.4f}",
               f"{res['cost_reduction_percent']['r2']-0.2445:+.4f} vs baseline")
-    c4.metric("Cost RMSE",    f"{res['cost_reduction_percent']['rmse']:.3f}")
+    c4.metric("Cost RMSE",   f"{res['cost_reduction_percent']['rmse']:.3f}")
 
     st.divider()
     tab1, tab2, tab3 = st.tabs(["Feature importance", "SHAP beeswarm", "Actual vs predicted"])
@@ -288,7 +290,7 @@ elif page == "💰 Module 3 — ROI Regression":
     st.markdown('<div class="insight-box"><strong>On R²≈0.24:</strong> Revenue growth is shaped by macroeconomics, competition, and leadership — far beyond AI metrics alone. The SHAP plot shows <em>direction</em>: high maturity → revenue up; high failure rate → revenue down.</div>', unsafe_allow_html=True)
 
 # ── PAGE: Module 4 ────────────────────────────────────────────────────────────
-elif page == "⚖️  Module 4 — Ethics & Risk":
+elif page == "⚖️ Module 4 — Ethics & Risk":
     st.title("Module 4 — Ethics & Risk Factor Analysis")
     st.caption("OLS regression adjustment · Failure risk odds ratios · Reverse causality finding")
 
@@ -300,7 +302,7 @@ elif page == "⚖️  Module 4 — Ethics & Risk":
     ols = m4["ols_results"]
     col1, col2, col3 = st.columns(3)
     for col, outcome in zip([col1,col2,col3],
-                            ["revenue_growth_percent","ai_failure_rate","ai_maturity_score"]):
+                             ["revenue_growth_percent","ai_failure_rate","ai_maturity_score"]):
         r   = ols[outcome]
         sig = "***" if r["pval"]<0.001 else "**" if r["pval"]<0.01 else "*" if r["pval"]<0.05 else "ns"
         col.metric(outcome.replace("_percent","").replace("_"," ").title(),
@@ -308,8 +310,10 @@ elif page == "⚖️  Module 4 — Ethics & Risk":
 
     st.divider()
     col1, col2 = st.columns(2)
+
     with col1:
-        img_path = p("outputs/m4_ethics_risk.png")
+        # ✅ FIX 1: was "outputs/m4_ethics_risk.png" (wrong root path)
+        img_path = p("Notebook/outputs/m4_ethics_risk.png")
         if pathlib.Path(img_path).exists():
             st.image(img_path)
 
@@ -339,12 +343,16 @@ elif page == "🔧 Optuna Tuning":
     if m3t and "results" in m3t:
         r3 = m3t["results"]
         if "revenue_growth_percent" in r3 and "r2" in r3["revenue_growth_percent"]:
-            c2.metric("M3 Revenue R²", f"{r3['revenue_growth_percent']['r2']:.4f}", f"{r3['revenue_growth_percent']['r2']-0.2357:+.4f}")
+            c2.metric("M3 Revenue R²", f"{r3['revenue_growth_percent']['r2']:.4f}",
+                      f"{r3['revenue_growth_percent']['r2']-0.2357:+.4f}")
         if "cost_reduction_percent" in r3 and "r2" in r3["cost_reduction_percent"]:
-            c3.metric("M3 Cost R²", f"{r3['cost_reduction_percent']['r2']:.4f}", f"{r3['cost_reduction_percent']['r2']-0.2445:+.4f}")
+            c3.metric("M3 Cost R²", f"{r3['cost_reduction_percent']['r2']:.4f}",
+                      f"{r3['cost_reduction_percent']['r2']-0.2445:+.4f}")
 
     st.divider()
-    img_path = p("outputs/optuna_convergence.png")
+
+    # ✅ FIX 2: was "outputs/optuna_convergence.png" (wrong root path)
+    img_path = p("Notebook/outputs/optuna_convergence.png")
     if pathlib.Path(img_path).exists():
         st.image(img_path, caption="Convergence — best score per trial")
     else:
@@ -359,6 +367,7 @@ elif page == "🔧 Optuna Tuning":
                          columns=["Parameter","Value"]).set_index("Parameter"))
         else:
             st.info("Best params not found in model pickle — re-run 06_optuna_tuning.py and recommit the pkl.")
+
     if m3t:
         res3 = m3t.get("results", {})
         if res3:
@@ -387,20 +396,20 @@ elif page == "🔮 Predict a Company":
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        years_ai      = st.slider("Years using AI",        0, 15, 3)
-        ai_budget_pct = st.slider("AI budget %",           0.0, 25.0, 8.0, 0.5)
-        ai_training   = st.slider("AI training hours",     0.0, 80.0, 25.0, 1.0)
-        num_tools     = st.slider("Num AI tools used",     1, 6, 2)
+        years_ai      = st.slider("Years using AI",        0,    15,    3)
+        ai_budget_pct = st.slider("AI budget %",           0.0,  25.0,  8.0,  0.5)
+        ai_training   = st.slider("AI training hours",     0.0,  80.0,  25.0, 1.0)
+        num_tools     = st.slider("Num AI tools used",     1,    6,     2)
     with col2:
-        ai_projects  = st.slider("Active AI projects",     0, 10, 3)
-        task_auto    = st.slider("Task automation rate",   0.0, 50.0, 20.0, 0.5)
-        failure_rate = st.slider("AI failure rate (%)",    0.0, 40.0, 25.0, 0.5)
-        maturity     = st.slider("AI maturity score",      0.0, 0.9, 0.35, 0.01)
+        ai_projects   = st.slider("Active AI projects",    0,    10,    3)
+        task_auto     = st.slider("Task automation rate",  0.0,  50.0,  20.0, 0.5)
+        failure_rate  = st.slider("AI failure rate (%)",   0.0,  40.0,  25.0, 0.5)
+        maturity      = st.slider("AI maturity score",     0.0,  0.9,   0.35, 0.01)
     with col3:
-        company_size = st.selectbox("Company size",  ["Startup","SME","Enterprise"])
-        industry     = st.selectbox("Industry",      ["Technology","Finance","Healthcare","Manufacturing","Retail","Agriculture","Education","Logistics","Consulting"])
-        region       = st.selectbox("Region",        ["Asia","Europe","North America","South America","Africa","Oceania"])
-        annual_rev   = st.number_input("Annual revenue (USD M)", 1.0, 10000.0, 100.0, 10.0)
+        company_size  = st.selectbox("Company size", ["Startup","SME","Enterprise"])
+        industry      = st.selectbox("Industry", ["Technology","Finance","Healthcare","Manufacturing","Retail","Agriculture","Education","Logistics","Consulting"])
+        region        = st.selectbox("Region",   ["Asia","Europe","North America","South America","Africa","Oceania"])
+        annual_rev    = st.number_input("Annual revenue (USD M)", 1.0, 10000.0, 100.0, 10.0)
 
     if st.button("Predict adoption stage", type="primary"):
         model    = m1["model"]
@@ -409,31 +418,42 @@ elif page == "🔮 Predict a Company":
         base_row = df.iloc[[0]].copy()
         num_emp  = {"Startup": 50, "SME": 300, "Enterprise": 2000}[company_size]
 
-        base_row["years_using_ai"]                  = years_ai
-        base_row["ai_budget_percentage"]            = ai_budget_pct
-        base_row["ai_training_hours"]               = ai_training
-        base_row["num_ai_tools_used"]               = num_tools
-        base_row["ai_projects_active"]              = ai_projects
-        base_row["task_automation_rate"]            = task_auto
-        base_row["ai_failure_rate"]                 = failure_rate
-        base_row["ai_maturity_score"]               = maturity
-        base_row["ai_intensity"]                    = ai_budget_pct * ai_training
+        base_row["years_using_ai"]               = years_ai
+        base_row["ai_budget_percentage"]          = ai_budget_pct
+        base_row["ai_training_hours"]             = ai_training
+        base_row["num_ai_tools_used"]             = num_tools
+        base_row["ai_projects_active"]            = ai_projects
+        base_row["task_automation_rate"]          = task_auto
+        base_row["ai_failure_rate"]               = failure_rate
+        base_row["ai_maturity_score"]             = maturity
+        base_row["ai_intensity"]                  = ai_budget_pct * ai_training
         base_row["log_annual_revenue_usd_millions"] = np.log1p(annual_rev)
-        base_row["log_num_employees"]               = np.log1p(num_emp)
+        base_row["log_num_employees"]             = np.log1p(num_emp)
 
-        CATS = ["region","industry","company_size","ai_primary_tool","ai_use_case","data_privacy_level"]
-        enc_pred = OrdinalEncoder(handle_unknown="use_encoded_value", unknown_value=-1)
-        enc_pred.fit(df[CATS])
         base_row["industry"]     = industry
         base_row["region"]       = region
         base_row["company_size"] = company_size
-        base_row[CATS]           = enc_pred.transform(base_row[CATS])
+
+        # ✅ FIX 3: use saved encoder if available, otherwise build a
+        #    deterministic one with sorted categories so orderings always
+        #    match what sklearn would have produced during training.
+        if "encoder" in m1:
+            enc_pred = m1["encoder"]
+        else:
+            enc_pred = OrdinalEncoder(
+                categories=[sorted(df[c].dropna().unique()) for c in CATS],
+                handle_unknown="use_encoded_value",
+                unknown_value=-1,
+            )
+            enc_pred.fit(df[CATS])
+
+        base_row[CATS] = enc_pred.transform(base_row[CATS])
 
         for col in base_row[features].select_dtypes(include=["object","string"]).columns:
             base_row[col] = 0.0
 
         X_input = base_row[features].apply(
-            lambda c: c.cat.codes if hasattr(c,"cat") else c
+            lambda c: c.cat.codes if hasattr(c, "cat") else c
         ).astype(float)
 
         probs = model.predict_proba(X_input)[0]
