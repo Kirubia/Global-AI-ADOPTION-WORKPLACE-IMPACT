@@ -3,7 +3,6 @@
 [![Live App](https://img.shields.io/badge/🚀%20Live%20App-Streamlit-FF4B4B?style=for-the-badge)](https://global-ai-adoption-workplace-impact-m5tytcqf4y28237mev4rmk.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?style=for-the-badge&logo=jupyter&logoColor=white)](https://jupyter.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
 > A four-module machine learning system that tracks how 10,000 companies across 9 industries are navigating AI adoption — and what separates the leaders from the laggards.
 
